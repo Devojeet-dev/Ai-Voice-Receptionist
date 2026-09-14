@@ -23,9 +23,17 @@ Updated: 2026-09-14
 
 ## Current status
 - The backend CRUD layer and route integration are complete.
-- The next milestone is API smoke testing against the live PostgreSQL database and then voice/AI integration.
+- The service layer now includes appointment availability checks, overlap detection, customer resolution helpers, and safe cancellation/reschedule logic for AI tool use.
+- A centralized AI tool registry has been added with validated tool definitions for business lookup, staff lookup, service lookup, availability checking, customer appointment lookup, appointment creation, cancellation, and rescheduling.
+- The tool layer calls services instead of Prisma directly, and keeps business rules inside the backend service layer.
+
+## Milestone: Backend Tool Layer / Tool Registry
+- Added tool contract types and centralized registry under `backend/src/ai`.
+- Added validated tool definitions for the required AI receptionist operations.
+- Reused the existing service architecture and kept tool definitions thin.
+- Verified TypeScript compilation passes with the registry in place.
 
 ## Next milestone
-- test the registered endpoints with a live PostgreSQL instance
-- confirm request/response payloads using seeded data
-- connect the AI voice booking workflow to the appointment APIs
+- LLM / Ollama integration
+- tool-calling orchestration with conversation flow
+- end-to-end voice transcription and appointment booking test against the live PostgreSQL database

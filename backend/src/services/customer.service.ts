@@ -66,6 +66,44 @@ export const customerService = {
     return customer;
   },
 
+  async findByPhone(phone: string): Promise<Prisma.CustomerGetPayload<object> | null> {
+    const normalizedPhone = phone.trim();
+    if (!normalizedPhone) {
+      return null;
+    }
+
+    return prisma.customer.findFirst({
+      where: {
+        phone: {
+          contains: normalizedPhone,
+          mode: "insensitive",
+        },
+      },
+    });
+  },
+
+  async findByPhoneOrName(input: { phone?: string; name?: string }): Promise<Prisma.CustomerGetPayload<object> | null> {
+    const { phone, name } = input;
+
+    if (phone) {
+      const customer = await this.findByPhone(phone);
+      if (customer) return customer;
+    }
+
+    if (name) {
+      return prisma.customer.findFirst({
+        where: {
+          name: {
+            contains: name,
+            mode: "insensitive",
+          },
+        },
+      });
+    }
+
+    return null;
+  },
+
   async create(data: Prisma.CustomerCreateInput): Promise<Prisma.CustomerGetPayload<object>> {
     return prisma.customer.create({ data });
   },
